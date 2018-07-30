@@ -1,0 +1,66 @@
+<HEAD><TITLE>Fast Copy with CMD</TITLE>
+ <style>.t {background-color: #00C2E9;border-radius: 2px;box-shadow: 0px 2px 4px #000000;font-family: Arial; color: #000; font-size: 16px; 
+padding: 3px 12px 3px 12px; border: solid #2854d6 1px; cursor: pointer;}</style>
+<hta:application applicationname="Fast Copy with CMD" ICON="%systemroot%\system32\imageres.dll" scroll="no" maximizeButton="no" BORDER="dialog" MINIMIZEBUTTON="no">
+</HEAD>
+<SCRIPT language="vbscript">
+window.resizeto 740,618
+function copy(mode)
+	Set mulai = CreateObject("WScript.Shell")
+	Set suruh = CreateObject("Shell.Application")
+	Set File = CreateObject("Scripting.FileSystemObject")
+    Set Folder = suruh.BrowseForFolder(0, "Pilih folder SUMBER:", &H10& , 17)
+	if (not Folder is nothing) then
+        sumber = Folder.Self.Path
+	else
+	Exit Function
+    end if
+	mber.innerHTML = "Sumber : "+sumber
+    Set Folder = suruh.BrowseForFolder(0, "Pilih folder TUJUAN:", &H10& , 17)
+	if (not Folder is nothing) then
+        tujuan = Folder.Self.Path
+		uan.innerHTML = "Tujuan : "+tujuan
+		dialog = MsgBox("Sumber: "+sumber+vbCrLf+"Tujuan : "+tujuan, vbYesNo, "File akan dicopy menurut keterangan berikut")
+		if dialog = vbYes then
+			hasil.innerHTML = "<center><p style='font-size:20px'><br>Sedang Proses Copy...</p></center>"
+			q = """"
+			perintah = "robocopy "+q+sumber+q+" "+q+tujuan+q+mode
+			mulai.Run "cmd /c " & perintah & " > " & "temp", 0, true
+			Set FileSementara = File.OpenTextFile("temp")
+			Do Until FileSementara.AtEndOfStream
+				i=i+1
+				if i>15 Then
+					teks=FileSementara.ReadLine()
+					x=InStr(teks, "%")
+					if x>5 Then
+						isi=Left(teks,x-4)
+					else
+						isi=teks
+					end if
+					lognya = lognya + isi & "<br>"
+				else
+					FileSementara.ReadLine()
+				end if
+			Loop
+			FileSementara.Close
+			hasil.innerHTML = "<p style='font-size:18px;margin-botom:-10px'>Laporan detail proses :</p>"+Replace(lognya, " ", "&nbsp;") & "<center>by: Naufal Irfan<br><br></center>"
+			File.DeleteFile "temp"
+			MsgBox("Copy sudah selesai!")
+		end if
+    end if
+End Function
+</SCRIPT>
+<BODY STYLE="font:14 pt verdana; background:#575757">
+<div style="color:white; font-size:13px;margin-top:-10px">by : Naufal Irfan</div>
+ <center style='color:white;margin:-10px'><div style="margin:5px;margin-top:-20px">Silahkan pilih mode copy :</div>
+<a class="t" type="button" onClick="copy(' /E /DCOPY:DA')">Dengan merubah date created</a>
+<a class="t" type="button" onClick="copy(' /E /DCOPY:DAT')">Tanpa merubah date created</a>
+<a class="t" type="button" onClick="copy(' /E /MOVE')">Moving (folder lama dihapus)</a>
+<div style="font-size:14px"><div id="mber" style="margin-top:8px;margin-bottom:5px">Sumber :</div><div id="uan">Tujuan :</div></div>
+ </center><div style="margin:-10px"><b>_____________________________________________________________</b></div>
+ <div style="font-size:13px;background-color:#202020;font-family:courier new; color:Darkorange; overflow:scroll; margin:-11px;margin-top:8px;height:467px;width:722px"><div style="white-space:nowrap;" id="hasil">
+ <div style="font-size:39px;font-family:arial"><center><b>Selamat datang di Fast Copy</center></b></div><br><br>Yang akan di copy adalah semua yg ada dalam folder, bukan foldernya.<br><br>
+Kalau mau copy folder, masukkan lokasi tujuan yg namanya sama dengan folder sumber.<br>
+Contoh : sumbernya "D:\FILM\Avatar" tujuannya "E:\Video\Avatar"<br><br>
+Untuk mode dengan mengubah date created itu mirip seperti kerja copy explorer,<br>sementara mode tanpa merubah date created itu benar-benar menduplikat folder</div></div>
+</BODY> 
