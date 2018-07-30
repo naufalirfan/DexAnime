@@ -1,0 +1,113 @@
+<HEAD><TITLE>Tebak Angka by Naufal</TITLE>
+ <style>.t {background-color: #00C2E9;border-radius: 2px;box-shadow: 0px 2px 4px #000000;font-family: Arial; color: #000; 
+ font-size: 16px; border: solid #2854d6 1px; cursor: pointer;padding:3px 10px 3px 10px;}</style>
+<hta:application applicationname="Tebak Angka by Naufal" ICON="%systemroot%\system32\imageres.dll" scroll="no" maximizeButton="no" BORDER="dialog" MINIMIZEBUTTON="no">
+</HEAD>
+<SCRIPT language="vbscript">
+Dim atas, bawah, sebenarnya, tanda
+atas=1000
+bawah=0
+Randomize
+sebenarnya=Int(1001*Rnd)
+tanda=0
+window.resizeto 740,618
+function mulai
+	if (tanda=0) Then
+	riwayat.innerHTML="<br>Silahkan tebak angkanya<p style='font-size:23px;font-family:arial'>Game dimulai...</p>"&riwayat.innerHTML
+	end if
+	tanda=1
+	randomboz.innerHTML=500
+	saldo.innerHTML="$"&saldo.innerHTML-taruhan.innerHTML
+	riwayat.innerHTML="<br>-"&taruhan.innerHTML&" buat bayar taruhan"&riwayat.innerHTML
+End Function
+function ubah(beda)
+	bid=taruhan.innerHTML+beda
+	taruhan.innerHTML= "$" & bid
+End Function
+function tinggi
+	if (tanda=1) Then
+		denda = int(atas-bawah)
+		bawah=Int(randomboz.innerHTML)
+		if (sebenarnya<bawah) Then
+			riwayat.innerHTML="<br>kalah :v kamu dapet reward sejumlah kemungkinan yg udah dihilangkan, angka sebenarnya : "&sebenarnya&riwayat.innerHTML
+			MsgBox("BOOM!"+vbCrLf+"Angka lebih rendah dari ini")
+			menang=taruhan.innerHTML+500-denda
+			call update(menang)
+		else
+		riwayat.innerHTML="<br>Selamat! angka diatas "&bawah&", kemungkinan antara "&bawah&" - "&atas&riwayat.innerHTML
+		call random(bawah, atas)
+		end if
+	else	
+	riwayat.innerHTML="<br>Klik mulai dulu!"&riwayat.innerHTML
+	end if
+End Function
+function rendah
+	if (tanda=1) Then
+		denda = int(atas-bawah)
+		atas=Int(randomboz.innerHTML)
+		if (sebenarnya>atas) Then
+			riwayat.innerHTML="<br>kalah :v kamu dapet reward sejumlah kemungkinan yg udah dihilangkan, angka sebenarnya : "&sebenarnya&riwayat.innerHTML
+			MsgBox("BOOM!"+vbCrLf+"Angka lebih tinggi dari ini")
+			menang=taruhan.innerHTML+500-denda
+			call update(menang)
+		else
+		riwayat.innerHTML="<br>Selamat! angka dibawah "&atas&", kemungkinan antara "&bawah&" - "&atas&riwayat.innerHTML
+		call random(bawah, atas)
+		end if
+	else	
+	riwayat.innerHTML="<br>Klik mulai dulu!"&riwayat.innerHTML
+	end if
+End Function
+function random(kecil,besar)
+	Randomize
+	randomboz.innerHTML= Int((besar-kecil+1)*Rnd+kecil)
+End Function
+function done
+	if (tanda=1) Then
+		tebakan=randomboz.innerHTML
+		selisih=tebakan-sebenarnya
+		if selisih<0 Then
+			selisih=selisih*-1
+		end if
+		riwayat.innerHTML="<br>Angka sebenarnya adalah "&sebenarnya&", selisih "&selisih&" dari tebakanmu<br>reward menebak : $"&taruhan.innerHTML*2&"<br>denda : $"&selisih*3&riwayat.innerHTML
+		menang=(taruhan.innerHTML*2)-selisih*3
+		call update(menang)
+	else
+	riwayat.innerHTML="<br>Klik mulai dulu!"&riwayat.innerHTML
+	end if
+End Function
+function update(perubahan)
+	uang=saldo.innerHTML+perubahan
+	saldo.innerHTML= "$" & +uang
+	riwayat.innerHTML="<br><b>_________________________________________________________</b><br>Dapet "&perubahan&" dollar, silahkan ubah taruhan lalu klik mulai"&riwayat.innerHTML
+	Randomize
+	sebenarnya=Int(1001*Rnd)
+	atas=1000
+	bawah=0
+	tanda=2
+End Function
+</SCRIPT>
+<BODY STYLE="font:14 pt verdana; color:Darkorange; background:#202020">
+<div style="margin:5px;margin-top:-15px;float:right">Saldo anda&nbsp;&nbsp;</div><br>
+<div id="saldo" style="width:150px;padding:2px;color:black; float:right; margin-top:-15px; background-color:#BCBCBC; text-align:center; font-size:26px;border:1px solid black">$2000</div>
+<div style="margin-top:-24px;padding-left:5px">Taruhan :
+	<a class="t" style="display:inline;font-size:20px" onClick="ubah(-10)"><b>&#x2039;</b></a>
+	<div id="taruhan" style="width:110px;display:inline;text-align:center;border:1px solid black;margin-left:-7px;margin-bottom:-8px;padding:2px">$500</div>
+	<a class="t" style="display:inline;font-size:20px" onClick="ubah(10)"><b>&#x203A;</b></a><br><br>
+<p style="margin-top:-10px;margin-bottom:10px;padding-left:305px">Tebakan</p>
+</div>
+<a class="t" style="float:right;margin-right:100px;font-size:21px;margin-top:10px" onClick="tinggi()">Lebih Tinggi</a><div style="margin:-5px"><br></div>
+<a class="t" style="margin-left:90px;font-size:21px;margin-bottom:200px" onClick="rendah()">Lebih Rendah</a><br><br>
+<center><div id="randomboz" contenteditable="true" style="font-size:50px;width:150px; background-color:#191919;margin-top:-70px;padding:2px;border:1px solid black">500</div><div style="margin:-10px"><br></div>
+	<a class="t" style="margin-top:-3px;" onClick="done()">Gunakan angka ini</a></center>
+<a class="t" style="float:left;margin-top:-23px;margin-bottom:-50px" onClick="mulai()">Mulai</a>
+<div style="margin:-10px"><b>_____________________________________________________________</b></div>
+ <div id="scrolls" style="font-size:13px;background-color:#0D0D0D;font-family:courier new; color:Darkorange; overflow:scroll; margin:-11px;margin-top:8px;height:415px;width:722px"><div style="white-space:nowrap;" id="riwayat">
+ <center><div style="font-size:39px;font-family:arial"><b>Selamat datang di Tebak Angka</b></div>by: Naufal Irfan</center><br>Ini adalah game yang membutuhkan keberuntungan :v<br><br>
+Aku punya angka random antara 1-1000, nah tugas kalian adalah menebak angka itu,<br>
+kalian bisa menghilangkan kemungkinan dengan menebak lebih tinggi/rendah,<br>kalau salah menebak maka reward sejumlah kemungkinan yg sudah dihilangkan<br>
+Oh iya, <b>kalian bisa edit tebakan kalian pakai mouse & tulis angkanya</b><br><br>
+Jika kalian menebak dengan menggunakan angka pasti, begini sistem reward nya :<br>
+reward = (taruhan x 2) - (selisih tebakan dengan angka sebenarnya x 3)<br>
+Gimana? udah klik mulai aja biar ngerti!<br><br></div></div>
+</BODY> 
