@@ -26,7 +26,7 @@ namespace Anime_Info {
                     //pertama generate object request
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://dexanime.com/" + lokasi + "/" + nama);                    
                 request.Method = WebRequestMethods.Ftp.UploadFile;  //set property
-                request.Credentials = new NetworkCredential("animeinfo_dexanime.com", "AnimeInfo775");                    
+                request.Credentials = new NetworkCredential("username", "password");             
                 byte[] data = Encoding.UTF8.GetBytes(file);         //ambil (byte) data dari file                                                                    
                 request.ContentLength = data.Length;                //set property lagi                              
                 Stream server = request.GetRequestStream();         //write data dengan stream
@@ -45,7 +45,7 @@ namespace Anime_Info {
                             //soalnya kalau directory sudah ada akan terjadi error, tapi ignore saja
                 FtpWebRequest requestDir = (FtpWebRequest)WebRequest.Create("ftp://dexanime.com/" + lokasi);
                 requestDir.Method = WebRequestMethods.Ftp.MakeDirectory;
-                requestDir.Credentials = new NetworkCredential("animeinfo_dexanime.com", "AnimeInfo775");
+                requestDir.Credentials = new NetworkCredential("username", "password");
                 requestDir.UsePassive = true;
                 requestDir.UseBinary = true;
                 requestDir.KeepAlive = false;
